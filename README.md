@@ -9,4 +9,4 @@
 ### 디렉토리 구성
 - 'consensus-clustering': 통합 클러스터링 diceR 코드. R로 작성.
 - 'indiv-method': IKM/ Biclustering/ CURE/ BIRCH 알고리즘 코드. Python 작성. 
-- 데이터 파일: indiv-method/dataFile/201126 안에 txt 형식으로 있음.
+- 데이터 파일: dataFile/201126 안에 txt 형식으로 있음.
