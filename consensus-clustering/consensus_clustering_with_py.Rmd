@@ -1,0 +1,142 @@
+---
+title: "ColonPolyps_project"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+
+```{r}
+use_python("/usr/local/bin/python")
+```
+
+```{r}
+library(diceR)
+library(ggplot2)
+library(ggfortify)
+library(cluster)
+library(Rtsne)
+library(data.table)
+library(reticulate)
+pyclustering<-import('pyclustering')
+pyclustering$cluster$cure
+cure<-py_to_r(pyclustering$cluster$cure)
+
+colon_data<-fread("../dataFile/201126/Colon_merged_273samples.txt")
+```
+
+```{r}
+colon_data<-colon_data[, -12980]
+lable<-colon_data[, 12979]
+colon_data<-colon_data[, -12979]
+row_name<-unlist(colon_data[,1])
+colon_data<-colon_data[, -1]
+
+```
+
+
+```{r}
+obj<-dice(colon_data,nk=10:20,reps=10, algorithms = c("hc","km","diana"), cons.funs = c("majority","CSPA","LCE"), progress = TRUE , evaluate = F ,prep.data = "full")
+```
+```{r}
+obj$clusters
+```
+
+```{r}
+cons_result<-as.data.frame(obj[["clusters"]],row.names = row_name)
+c_data_df<-as.data.frame(colon_data, row.names=row_name)
+```
+
+```{r}
+autoplot(prcomp(c_data_df, center = T, scale. = T), 
+         data = c_data_df, colour =as.factor(cons_result$majority), size = 3, label = F,
+         loadings = FALSE, loadings.label = FALSE, loadings.label.colour = "black",
+         loadings.colour = 'black') +
+    theme_bw() + 
+    theme(legend.direction = 'horizontal', legend.position = 'top')
+```
+
+```{r}
+autoplot(prcomp(c_data_df, center = T, scale. = T), 
+         data = c_data_df, colour =as.factor(cons_result$CSPA), size = 3, label = F,
+         loadings = FALSE, loadings.label = FALSE, loadings.label.colour = "black",
+         loadings.colour = 'black') +
+    theme_bw() + 
+    theme(legend.direction = 'horizontal', legend.position = 'top')
+```
+
+```{r}
+autoplot(prcomp(c_data_df, center = T, scale. = T), 
+         data = c_data_df, colour =as.factor(cons_result$LCE), size = 3, label = F,
+         loadings = FALSE, loadings.label = FALSE, loadings.label.colour = "black",
+         loadings.colour = 'black') +
+    theme_bw() + 
+    theme(legend.direction = 'horizontal', legend.position = 'top')
+
+```
+
+```{r}
+#consensus clustering with another function
+obj<-dice(colon_data,nk=18:28,reps=10, algorithms = c("km","diana","hc"), cons.funs = c("majority","CSPA","LCE"), progress = TRUE , evaluate = F , prep.data = "full")
+```
+
+```{r}
+obj$clusters
+```
+clustering 범위 10~28까지 했을때, 19가 가장 이상적인 값으로 보임. (19 이상의 clustering 진행되지 않음)
+
+```{r}
+autoplot(prcomp(c_data_df, center = T, scale. = T), 
+         data = c_data_df, colour =as.factor(cons_result$majority), size = 3, label = F,
+         loadings = FALSE, loadings.label = FALSE, loadings.label.colour = "black",
+         loadings.colour = 'black') +
+    theme_bw() + 
+    theme(legend.direction = 'horizontal', legend.position = 'top')
+```
+
+```{r}
+autoplot(prcomp(c_data_df, center = T, scale. = T), 
+         data = c_data_df, colour =as.factor(cons_result$CSPA), size = 3, label = F,
+         loadings = FALSE, loadings.label = FALSE, loadings.label.colour = "black",
+         loadings.colour = 'black') +
+    theme_bw() + 
+    theme(legend.direction = 'horizontal', legend.position = 'top')
+```
+
+```{r}
+autoplot(prcomp(c_data_df, center = T, scale. = T), 
+         data = c_data_df, colour =as.factor(cons_result$LCE), size = 3, label = F,
+         loadings = FALSE, loadings.label = FALSE, loadings.label.colour = "black",
+         loadings.colour = 'black') +
+    theme_bw() + 
+    theme(legend.direction = 'horizontal', legend.position = 'top')
+
+```
+
+
+```{r}
+#consensus clustering with another function
+obj<-dice(colon_data,nk=10:20,reps=10, algorithms = c("km","diana","cure"), cons.funs = c("majority","CSPA","LCE"), progress = TRUE , evaluate = F ,prep.data = "full")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
