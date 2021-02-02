@@ -15,7 +15,7 @@ colon_data<-colon_data[, -1]
 #header <- read.table("Colon_merged_273.txt", header = TRUE)
 #indata <- fread("Colon_merged.txt", skip=1, header=FALSE)
 
-obj<-dice(colon_data,nk=2:10,reps=10, algorithms = c("hc","km","diana"), k.method = 5 , cons.funs = c("majority","CSPA","LCE"), progress = TRUE, evaluate = F, prep.data = "full")
+obj<-dice(colon_data,nk=10:15,reps=10, algorithms = c("hc","km","diana"), cons.funs = c("majority","CSPA","LCE"), progress = TRUE , evaluate = F ,prep.data = "full")
 cons_result<-as.data.frame(obj[["clusters"]],row.names = row_name)
 c_data_df<-as.data.frame(colon_data, row.names=row_name)
 
@@ -39,3 +39,4 @@ autoplot(prcomp(c_data_df, center = T, scale. = T),
          loadings.colour = 'black') +
     theme_bw() + 
     theme(legend.direction = 'horizontal', legend.position = 'top')
+
