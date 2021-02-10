@@ -14,6 +14,8 @@ import numpy
 
 df = pd.read_table('../dataFile/201126/Colon_merged_273samples.txt')
 
+df
+
 print("Contion열 포함 Original 데이터 프레임 크기:", df.shape,"\n")    
 
 #유전자 이름 list로
@@ -467,6 +469,8 @@ from pyclustering.samples.definitions import FCPS_SAMPLES
 # Allocate three clusters.
 
 X=finalDataFrame.iloc[:,[0,1]].to_numpy()
+X
+
 cure_instance = cure(X, 5)
 cure_instance.process()
 clusters = cure_instance.get_clusters()
