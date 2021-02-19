@@ -20,14 +20,11 @@ library(Rtsne)
 library(data.table)
 library(reticulate)
 use_python("/usr/local/bin/python")
-source_python("read_cure.py")
+source_python("clustering_func.py")
 
 pyclustering<-import('pyclustering')
 np<-import('numpy')
 pd<-import('pandas')
-
-
-cure<-pyclustering$cluster$cure$cure
 
 colon_data_df<-pd$read_table("../dataFile/201126/Colon_merged_273samples.txt")
 colon_data<-fread("../dataFile/201126/Colon_merged_273samples.txt")
@@ -137,10 +134,9 @@ consensus_cluster
 ```
 
 ```{r}
-cure_result<-cure_func('../dataFile/201126/Colon_merged_273samples.txt',19)
-cure_result
-cluster<-cure_result$get_clusters()
-cluster
+cure_cluster<-cure_func(19)
+birch_cluster<-BIRCH_func(19)
+
 ```
 
 
