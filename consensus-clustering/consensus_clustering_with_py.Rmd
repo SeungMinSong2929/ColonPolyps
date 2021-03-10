@@ -36,12 +36,10 @@ lable<-colon_data[, 12979]
 colon_data<-colon_data[, -12979]
 row_name<-unlist(colon_data[,1])
 colon_data<-colon_data[, -1]
-
 ```
 
-
 ```{r}
-obj<-dice(colon_data,nk=20,reps=10, algorithms = c("hc","km","diana"), cons.funs = c("majority","CSPA","LCE"), progress = TRUE , evaluate = F, prep.data = "full")
+obj<-dice(colon_data,nk=19,reps=10, algorithms = c("hc","km","diana"), cons.funs = c("majority","CSPA","LCE"), progress = TRUE , evaluate = F, prep.data = "full")
 ```
 ```{r}
 obj$clusters
@@ -118,30 +116,51 @@ autoplot(prcomp(c_data_df, center = T, scale. = T),
 
 ```
 
+```{r}
+
+birch_cluster<-BIRCH_func(colon_data, as.integer(19))
+
+assign("CURE", cure_func, 1)
+assign("BIRCH", BIRCH_func, 1)
+
+CURE<-function(df, k){
+  cure_cluster<-cure_func(df,as.integer(k))
+  for(i in 1:k){
+    for(j in 1:length(cure_cluster[[i]])){
+      arr[(cure_cluster[[i]][j]+1)]<-i
+    }
+  }
+  arr<-as.integer(arr)
+  return(arr)
+}
+
+cure_cluster<-cure_func(colon_data, as.integer(19))
+
+cure_data<-CURE(colon_data,19)
+
+```
 
 ```{r}
-#consensus clustering with another function
-obj<-dice(colon_data,nk=19:20,reps=10, algorithms = c("km","diana","cure"), cons.funs = c("majority","CSPA","LCE"), progress = TRUE , evaluate = F ,prep.data = "full")
-```
-cure 알고리즘 내의 오류 존재, 제대로 돌아가지 않으므로 dice 대신 consensus_clustering method를 사용
-
-```{r}
-cc <- consensus_cluster(colon_data, reps = 6, algorithms = c("km", "diana", "cure"), distance = c("euclidean"), progress = T)
-
-```
-```{r}
-consensus_cluster
+cure_data
+print(" ------------------------- ")
+km_data
+print(" ------------------------- ")
+cure_cluster
 ```
 
 ```{r}
-cure_cluster<-cure_func(19)
-birch_cluster<-BIRCH_func(19)
-
+birch_cluster
 ```
+```{r}
+km <- function(x, k) {
+  as.integer(stats::kmeans(x, k)$cluster)
+}
 
+km_data<-km(colon_data, 19)
+km_data
 
-
-
+cc <- consensus_cluster(colon_data, nk=19, reps = 10, algorithms = c("CURE","BIRCH"), distance = c("euclidean"), progress = T)
+```
 
 
 
