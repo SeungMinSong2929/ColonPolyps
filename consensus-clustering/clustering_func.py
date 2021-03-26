@@ -17,7 +17,7 @@ from pyclustering.cluster import cluster_visualizer
 from pyclustering.utils import read_sample
 from pyclustering.samples.definitions import FAMOUS_SAMPLES
 
-def cure_func(df,k):
+def cure_func(data,k):
     #df=DataFrame(df)
     df = pd.read_table('../dataFile/Colon_merged.txt')
     #유전자 이름 list로
@@ -27,7 +27,9 @@ def cure_func(df,k):
     my_set = set(condition_list) #집합set으로 변환
     sampleName = list(my_set) #list로 변환
     
-    data=df.loc[:,only_geneID]
+    data=DataFrame(data)
+    data=data.apply(pd.to_numeric)
+    
     column=sampleName[:len(sampleName)+1]
     
     # predict열 새로 생성.
@@ -50,7 +52,6 @@ def cure_func(df,k):
         predict.loc[predict["predict"] == i,:] = num
         num =num+1
         
-    
     X=data.to_numpy()
     
     pca=PCA() #주성분 개수 지정하지 않고 클래스생성

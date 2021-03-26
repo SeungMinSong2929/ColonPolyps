@@ -50,7 +50,7 @@ BIRCH<-function(df, k){
 
 
 
-cc <- consensus_cluster(colon_data, nk=19, reps = 10, algorithms = c("CURE","km"), distance = c("euclidean"), progress = T)
+cc <- consensus_cluster(colon_data, nk=19, reps = 10, algorithms = c("CURE"), distance = c("euclidean"), progress = T)
 cc
 
 kmeans_result<-as.integer(stats::kmeans(colon_data,19)$cluster)
