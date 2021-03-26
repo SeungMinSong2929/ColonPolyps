@@ -17,8 +17,9 @@ from pyclustering.cluster import cluster_visualizer
 from pyclustering.utils import read_sample
 from pyclustering.samples.definitions import FAMOUS_SAMPLES
 
-def cure_func(data,k):
-    df = pd.read_table('../dataFile/201126/Colon_merged_273samples.txt')
+def cure_func(df,k):
+    #df=DataFrame(df)
+    df = pd.read_table('../dataFile/Colon_merged.txt')
     #유전자 이름 list로
     only_geneID=df.columns.tolist()[:-2] #제일 마지막 칼럼이 batch, 마지막에서 2번째 칼럼이 condition
     # Condition-샘플 이름
@@ -157,7 +158,7 @@ def cure_func(data,k):
     
     
 def BIRCH_func(data,k):
-    df = pd.read_table('../dataFile/201126/Colon_merged_273samples.txt')
+    df = pd.read_table('../dataFile/Colon_merged.txt')
     only_geneID=df.columns.tolist()[:-2] #제일 마지막 칼럼이 batch, 마지막에서 2번째 칼럼이 condition
     condition_list=df['Condition'].tolist()
     my_set = set(condition_list) #집합set으로 변환

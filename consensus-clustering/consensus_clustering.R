@@ -5,6 +5,9 @@ library(cluster)
 library(Rtsne)
 library(data.table)
 
+install.packages("diceR")
+
+
 colon_data<-fread("Colon_merged_273samples.txt")
 colon_data<-colon_data[, -12980]
 lable<-colon_data[, 12979]
