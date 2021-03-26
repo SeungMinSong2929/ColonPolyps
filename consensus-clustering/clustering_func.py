@@ -28,9 +28,7 @@ def cure_func(df,k):
     sampleName = list(my_set) #list로 변환
     
     data=df.loc[:,only_geneID]
-    
     column=sampleName[:len(sampleName)+1]
-    
     
     # predict열 새로 생성.
     predict=df[['Condition']]
@@ -78,14 +76,8 @@ def cure_func(df,k):
     
     
 def BIRCH_func(data,k):
-<<<<<<< HEAD
-    df = pd.read_table('../dataFile/Colon_merged.txt')
-    only_geneID=df.columns.tolist()[:-2] #제일 마지막 칼럼이 batch, 마지막에서 2번째 칼럼이 condition
-=======
     df = pd.read_table('../dataFile/201126/Colon_merged_273samples.txt')
-    
     only_geneID=df.columns.tolist()[:-2] 
->>>>>>> 5d1778535d13e3330d75f25b0c24f346c3f6aafe
     condition_list=df['Condition'].tolist()
     my_set = set(condition_list) #집합set으로 변환
     sampleName = list(my_set) #list로 변환
