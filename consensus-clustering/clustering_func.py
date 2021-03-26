@@ -45,8 +45,8 @@ def cure_func(df,k):
     # 샘플-> 숫자 매핑(목적: PCA 하기 위함)
     # predict 값들이 모두 숫자로 변경.
     num=1
-    for i in combine_sampleName:
-        print(i)
+    for i in sampleName:
+        #print(i)
         predict.loc[predict["predict"] == i,:] = num
         num =num+1
         
@@ -95,8 +95,8 @@ def BIRCH_func(data,k):
     r = pd.concat([data, predict],axis=1)
     
     num=1
-    for i in combine_sampleName:
-        print(i)
+    for i in sampleName:
+        #print(i)
         predict.loc[predict["predict"] == i,:] = num
         num =num+1
         
@@ -123,7 +123,7 @@ def BIRCH_func(data,k):
         if label[0] not in labels:
             labels.append(label[0])
 
-    sortedLabels=sorted(labels)
+    #sortedLabels=sorted(labels)
 
     X=finalDataFrame.iloc[:,[0,1]].values.tolist()
     birch_instance = birch(X, int(k), diameter=3.0)
