@@ -26,112 +26,32 @@ def cure_func(df,k):
     condition_list=df['Condition'].tolist()
     my_set = set(condition_list) #집합set으로 변환
     sampleName = list(my_set) #list로 변환
-    # batch
-    batch_list=df['batch'].tolist()
-    batch_set = set(batch_list) #집합set으로 변환
-    batchName = list(batch_set) #list로 변환
     
     data=df.loc[:,only_geneID]
     
     column=sampleName[:len(sampleName)+1]
     
-    # 각 샘플별 개수 
-    # for i in sampleName[1:]:
-    #     print(i,"\t+",df.loc[df["Condition"] == i,:].shape[0])
     
-    df.loc[df["Condition"].isna()] # df.loc[["SSP_4","SSP_8"],:] 같은 의미
-
-    
-    # https://note.espriter.net/1326
-    
-    #predict=pd.DataFrame(df['Condition'].tolist())
+    # predict열 새로 생성.
     predict=df[['Condition']]
     predict.columns=['predict']
     
-    # <b> 이름은 다른데, 같은 샘플들 합치기 </b>
+    # SSA/P -> SSA.P로 변경 '/' 인식을 못하기 때문.
+    predict.loc[predict["predict"] == 'SSA/P'] = 'SSA.P'
+    sampleName[2]='SSA.P' # sampleName에서도 변경.
     
-    # healthy colonic tissue = control = NAN = NS <br>
-    # Tubulovillous adenoma = Villous/Tubluovillous adenoma = tubulovillous polyp = tubulovillous adenoma <br>
-    # sessile serrated adenoma = SSA/P = SSP <br> 
-    # adenomatous polyp = AP <br>
-    # Cancer = Ca = colorectal adenocarcinoma <br>
-    
-    combine_sampleName=sampleName[:]
-    
-    NS=['healthy colonic tissue', 'Control', 'NS']
-    
-    for i in NS:
-        predict.loc[predict["predict"] == i,:] = NS[0]
-    
-    # NAN값인 샘플들 NS[0]으로 변경
-    predict.loc[["SSP_4"],"predict"]=NS[0]
-    predict.loc[["SSP_8"],"predict"]=NS[0]
-    
-    # predict-샘플 이름
-    predict_list=predict['predict'].tolist()
-    predict_set = set(predict_list) #집합set으로 변환
-    combine_sampleName = list(predict_set) #list로 변환
-    
-    TubA=['Tubulovillous adenoma', 'Villous / tubulovillous adenoma', 'tubulovillous polyp', 'tubulovillous adenoma', 'villous adenoma']
-    
-    for i in TubA:
-        predict.loc[predict["predict"] == i,:] = TubA[0]
-        
-    # predict-샘플 이름
-    predict_list=predict['predict'].tolist()
-    predict_set = set(predict_list) #집합set으로 변환
-    combine_sampleName = list(predict_set) #list로 변환
-    
-    SSP=['sessile serrated adenoma', 'SSA/P', 'SSP']
-
-    for i in SSP:
-        predict.loc[predict["predict"] == i,:] = SSP[0]
-        
-    # predict-샘플 이름
-    predict_list=predict['predict'].tolist()
-    predict_set = set(predict_list) #집합set으로 변환
-    combine_sampleName = list(predict_set) #list로 변환
+    # 샘플 이름 있는 predict 데이터프레임과 합치기
+    r = pd.concat([data, predict],axis=1)
     
     
-    AP=['adenomatous polyp', 'AP']
-    
-    for i in AP:
-        predict.loc[predict["predict"] == i,:] = AP[0]
-        
-    predict_list=predict['predict'].tolist()
-    predict_set = set(predict_list) #집합set으로 변환
-    combine_sampleName = list(predict_set) #list로 변환
-    
-    Cancer=['Cancer', 'Ca', 'Colorectal adenocarcinoma']
-    
-    for i in Cancer:
-        predict.loc[predict["predict"] == i,:] = Cancer[0]
-        
-    # predict-샘플 이름
-    predict_list=predict['predict'].tolist()
-    predict_set = set(predict_list) #집합set으로 변환
-    combine_sampleName = list(predict_set) #list로 변환
-
-    TA=['tubular adenoma', 'Tubular adenoma']
-    
-    for i in TA:
-        predict.loc[predict["predict"] == i,:] = TA[0]
-        
-    # predict-샘플 이름
-    predict_list=predict['predict'].tolist()
-    predict_set = set(predict_list) #집합set으로 변환
-    combine_sampleName = list(predict_set) #list로 변환
-    
-    # for i in combine_sampleName:
-    #     print(i,"\t+",predict.loc[predict["predict"] == i,:].shape[0])
-    
+    # 샘플-> 숫자 매핑(목적: PCA 하기 위함)
+    # predict 값들이 모두 숫자로 변경.
     num=1
     for i in combine_sampleName:
+        print(i)
         predict.loc[predict["predict"] == i,:] = num
         num =num+1
-    
-    # concatenate labels to df as a new column
-    r = pd.concat([data, predict],axis=1)
+        
     
     X=data.to_numpy()
     
@@ -158,39 +78,37 @@ def cure_func(df,k):
     
     
 def BIRCH_func(data,k):
+<<<<<<< HEAD
     df = pd.read_table('../dataFile/Colon_merged.txt')
     only_geneID=df.columns.tolist()[:-2] #제일 마지막 칼럼이 batch, 마지막에서 2번째 칼럼이 condition
+=======
+    df = pd.read_table('../dataFile/201126/Colon_merged_273samples.txt')
+    
+    only_geneID=df.columns.tolist()[:-2] 
+>>>>>>> 5d1778535d13e3330d75f25b0c24f346c3f6aafe
     condition_list=df['Condition'].tolist()
     my_set = set(condition_list) #집합set으로 변환
     sampleName = list(my_set) #list로 변환
-    batch_list=df['batch'].tolist()
-    batch_set = set(batch_list) #집합set으로 변환
-    batchName = list(batch_set) #list로 변환
     
     data=df.loc[:,only_geneID]
-
+    
     column=sampleName[:len(sampleName)+1]
-
-    for i in sampleName[1:]:
-        print(i,"\t+",df.loc[df["Condition"] == i,:].shape[0])
-
-
-    df.loc[df["Condition"].isna()] # df.loc[["SSP_4","SSP_8"],:] 같은 의미
-
+       
     predict=df[['Condition']]
     predict.columns=['predict']
-
-    predict.loc[["SSP_4"],"predict"]=0
-    predict.loc[["SSP_8"],"predict"]=0
-
+    
+    predict.loc[predict["predict"] == 'SSA/P'] = 'SSA.P'
+    sampleName[2]='SSA.P' # sampleName에서도 변경.
+    
+    r = pd.concat([data, predict],axis=1)
+    
     num=1
-    for i in sampleName[1:]:
+    for i in combine_sampleName:
+        print(i)
         predict.loc[predict["predict"] == i,:] = num
         num =num+1
+        
     
-    # concatenate labels to df as a new column
-    r = pd.concat([data, predict],axis=1)
-
     X=data.to_numpy()
     
     pca=PCA() #주성분 개수 지정하지 않고 클래스생성
