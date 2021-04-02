@@ -18,6 +18,7 @@ from pyclustering.utils import read_sample
 from pyclustering.samples.definitions import FAMOUS_SAMPLES
 
 def cure_func(data,k):
+    n=int(k)
     #df=DataFrame(df)
     df = pd.read_table('../dataFile/Colon_merged.txt')
     #유전자 이름 list로
@@ -70,7 +71,8 @@ def cure_func(data,k):
     finalDataFrame =pd.concat([principalDf, y], axis=1)
     
     X=finalDataFrame.iloc[:,[0,1]].to_numpy()
-    cure_instance=cure(X,k)
+    print(type(X))
+    cure_instance=cure(X,n)
     cure_instance.process()
     clusters = cure_instance.get_clusters()
     return clusters

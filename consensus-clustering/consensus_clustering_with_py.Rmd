@@ -26,19 +26,19 @@ pd<-import('pandas')
 cure<-pyclustering$cluster$cure$cure
 
 colon_data<-pd$read_table("../dataFile/Colon_merged.txt")
-colon_data<-fread("../dataFile/Colon_merged.txt")
-row_name<-unlist(colon_data[,1])
-colon_data<-colon_data[, -1]
+#<-fread("../dataFile/Colon_merged.txt")
+#row_name<-unlist(colon_data[,1])
+#colon_data<-colon_data[, -1]
 ```
 
 ```{r}
 colon_data<-colon_data[, -12955]
 colon_data<-colon_data[,-12954]
-lable<-colon_data[, ncol(colon_data)]
-colon_data<-colon_data[, -ncol]
-row_name<-unlist(colon_data[,1])
-colon_data<-colon_data[, -1]
-colon_data<-as.data.frame(colon_data)
+#lable<-colon_data[, ncol(colon_data)]
+#colon_data<-colon_data[, -ncol]
+#row_name<-unlist(colon_data[,1])
+#colon_data<-colon_data[, -1]
+#colon_data<-as.data.frame(colon_data)
 ```
 
 ```{r}
@@ -120,9 +120,9 @@ autoplot(prcomp(c_data_df, center = T, scale. = T),
 ```
 
 ```{r}
-result<-cure_func(colon_data,as.integer(19))
+result<-cure_func(colon_data,19)
 result
-result<-BIRCH_func(colon_data,as.integer(19))
+result<-BIRCH_func(colon_data,19)
 result
 
 CURE<-function(df, k){
@@ -133,7 +133,7 @@ CURE<-function(df, k){
       arr[(cure_cluster[[i]][j]+1)]<-i
     }
   }
-  as.integer(arr)
+  return(as.integer(arr))
 }
 
 BIRCH<-function(df, k){
@@ -144,7 +144,7 @@ BIRCH<-function(df, k){
       arr[(BIRCH_cluster[[i]][j]+1)]<-i
     }
   }
-  as.integer(arr)
+  return(as.integer(arr))
 }
 
 
@@ -173,7 +173,7 @@ KM <- function(x, k) {
 KM(colon_data,19)
 CURE(colon_data,19)
 
-cc <- consensus_cluster(colon_data, nk=19, reps = 10, algorithms = c("CURE"), progress = T, prep.data = "full")
+cc <- consensus_cluster(colon_data, nk=19, reps = 10, algorithms = c("CURE", "BIRCH"), progress = T, prep.data = "full")
 cc
 ```
 
