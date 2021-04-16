@@ -122,18 +122,19 @@ autoplot(prcomp(c_data_df, center = T, scale. = T),
 ```{r}
 result<-cure_func(colon_data,19)
 result
-result<-BIRCH_func(colon_data,19)
+result<-BIRCH_func(colon_data,5)
 result
-
+result<-result$process()
+result
 CURE<-function(df, k){
   arr<-NULL
   cure_cluster<-cure_func(df,as.integer(k))
   for(i in 1:k){
     for(j in 1:length(cure_cluster[[i]])){
-      arr[(cure_cluster[[i]][j]+1)]<-i
+      arr[(cure_cluster[[i]][j])+1]<-i
     }
   }
-  return(as.integer(arr))
+  as.integer(arr)
 }
 
 BIRCH<-function(df, k){
@@ -141,13 +142,16 @@ BIRCH<-function(df, k){
   BIRCH_cluster<-BIRCH_func(df,as.integer(k))
   for(i in 1:k){
     for(j in 1:length(BIRCH_cluster[[i]])){
-      arr[(BIRCH_cluster[[i]][j]+1)]<-i
+      arr[(BIRCH_cluster[[i]][j])+1]<-i
     }
   }
   return(as.integer(arr))
 }
 
+a<-BIRCH(colon_data,10)
 
+a<-BIRCH_func(colon_data,10)
+a
 cure_cluster<-cure_func(colon_data, as.integer(19))
 
 cure_data<-CURE(colon_data,19)
@@ -173,8 +177,17 @@ KM <- function(x, k) {
 KM(colon_data,19)
 CURE(colon_data,19)
 
-cc <- consensus_cluster(colon_data, nk=19, reps = 10, algorithms = c("CURE", "BIRCH"), progress = T, prep.data = "full")
+cc <- consensus_cluster(colon_data, nk=19, reps = 10, algorithms = c("BIRCH"), distance = c("euclidean"), progress = T)
 cc
+
+agnes <- function(d, k) {
+  return(as.integer(stats::cutree(cluster::agnes(d, diss = TRUE), k)))
+}
+ag<-cluster::agnes(colon_data, diss = TRUE)
+ag
+
+ag<-agnes(colon_data,19)
+stats::cutree(cluster::agnes(colon_data, diss = TRUE), 19)
 ```
 
 

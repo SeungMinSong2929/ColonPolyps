@@ -266,9 +266,6 @@ plt.savefig("only-PCA.png")
 
 #pip3 install pyclustering
 
-pip install pyclustering
-
-
 # ## pyclustering
 # ### birch
 
