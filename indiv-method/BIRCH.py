@@ -303,6 +303,9 @@ from pyclustering.samples.definitions import FAMOUS_SAMPLES
 
 # list 형태로!
 X=finalDataFrame.iloc[:,[0,1]].values.tolist()
+X
+
+birch
 
 for k in range(2,10):   
     birch_instance = birch(X, k, diameter=3.0)

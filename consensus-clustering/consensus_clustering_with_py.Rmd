@@ -141,16 +141,19 @@ BIRCH<-function(df, k){
   arr<-NULL
   BIRCH_cluster<-BIRCH_func(df,as.integer(k))
   for(i in 1:k){
-    for(j in 1:length(BIRCH_cluster[[i]])){
-      arr[(BIRCH_cluster[[i]][j])+1]<-i
+    if(!is.null(unlist(BIRCH_cluster[[i]]))){
+      for(j in 1:length(unlist(BIRCH_cluster[[i]][j]))){
+        arr[BIRCH_cluster[[i]][j]+1]<-i
+      }
     }
   }
   return(as.integer(arr))
 }
 
+unlist(a[2])
 a<-BIRCH(colon_data,10)
-
-a<-BIRCH_func(colon_data,10)
+a
+a<-BIRCH_func(colon_data,as.integer(10))
 a
 cure_cluster<-cure_func(colon_data, as.integer(19))
 
